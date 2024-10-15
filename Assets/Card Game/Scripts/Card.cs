@@ -7,6 +7,7 @@ public class Card : MonoBehaviour
 {
     public int value;
     private Vector3 originalScale;
+    public bool isMatched=false;
     private void Start()
     {
         originalScale = transform.localScale;
@@ -14,13 +15,20 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        StartCoroutine(StartCardOpenAnimation());
+        BoardManager.Instance.CardSelected(this);
     }
 
-    private IEnumerator StartCardOpenAnimation()
+    public void StartCardOpenAnimation()
     {
-        yield return transform.PlayCardOpen(originalScale);
-        yield return new WaitForSeconds(1);
-        yield return transform.PlayCardReturn(originalScale);
+        StartCoroutine(transform.PlayCardOpen(originalScale));
+    }
+    public void StartCardReturnAnimation()
+    {
+        StartCoroutine(transform.PlayCardReturn(originalScale));
+    }
+    public void MarkAsMatched()
+    {
+        isMatched = true;
+        gameObject.SetActive(false);  // Vanish the matched card
     }
 }

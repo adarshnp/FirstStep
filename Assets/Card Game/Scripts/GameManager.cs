@@ -10,4 +10,6 @@ public class GameManager : MonoBehaviour
     //track matches count
 
     //handle end game
+
+    //handle restart game
 }
