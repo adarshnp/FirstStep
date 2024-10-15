@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
+    //track moves count
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //track matches count
+
+    //handle end game
 }
