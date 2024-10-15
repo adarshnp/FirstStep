@@ -1388,7 +1388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d58fa083f5ffbb247aef40dcad7b0083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 1
+  value: 0
   isMatched: 0
 --- !u!61 &1271358909
 BoxCollider2D:
