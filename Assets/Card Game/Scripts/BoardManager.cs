@@ -79,6 +79,8 @@ public class BoardManager : MonoBehaviour
     {
         if (isCheckingMatch || selectedCard.isMatched || selectedCard == firstSelectedCard) return;
 
+        GameManager.instance.IncrementTurns();
+
         if (firstSelectedCard == null)
         {
             firstSelectedCard = selectedCard;
@@ -104,7 +106,7 @@ public class BoardManager : MonoBehaviour
         {
             firstSelectedCard.MarkAsMatched();
             secondSelectedCard.MarkAsMatched();
-            //increment match count
+            GameManager.instance.IncrementMatches();
             //play match sound
         }
         else
