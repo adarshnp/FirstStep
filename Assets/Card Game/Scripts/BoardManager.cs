@@ -15,11 +15,7 @@ public class BoardManager : MonoBehaviour
 
     private List<int> cardValues = new List<int>();
 
-    public int row;
-    public int col;
     public float spacing;
-    public float cardSize;
-
 
     private Card firstSelectedCard;
     private Card secondSelectedCard;
@@ -45,6 +41,7 @@ public class BoardManager : MonoBehaviour
         totalPairs = (rows * columns) / 2;
 
         GameManager.instance.SetTotalPairsCount(totalPairs);
+
         // Initialize card Values for each pair
         for (int i = 0; i < totalPairs; i++)
         {
@@ -65,8 +62,8 @@ public class BoardManager : MonoBehaviour
         //find cener right point of camera viewport in world space
         Vector3 centerRightAnchorPoint = cam.ViewportToWorldPoint(new Vector3(1, 0.5f, cam.nearClipPlane));
 
-        Vector3 gridPosition = new Vector3(centerRightAnchorPoint.x - col * spacing, centerRightAnchorPoint.y - row * 0.5f * spacing, 0);
-        board.position = gridPosition;
+        Vector3 gridPosition = new Vector3(centerRightAnchorPoint.x - columns * spacing, centerRightAnchorPoint.y - rows * 0.5f * spacing, 0);
+        board.position = gridPosition + new Vector3(1,1,0)*0.5f;
 
         // Card Distribution
         for (int row = 0; row < rows; row++)
