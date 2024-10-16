@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 /// <summary>
 /// class representing a card. 
@@ -12,6 +13,7 @@ public class Card : MonoBehaviour
     private Vector3 originalScale;
     public bool isMatched = false;
     private SpriteRenderer spriteRenderer;
+    public TMP_Text valueText;
     private void Start()
     {
         originalScale = transform.localScale;
@@ -20,6 +22,7 @@ public class Card : MonoBehaviour
     public void SetCardValue(int value)
     {
         this.value = value;
+        valueText.text = value.ToString();
     }
     private void OnMouseDown()
     {
