@@ -35,6 +35,7 @@ public class BoardManager : MonoBehaviour
     }
     private void Start()
     {
+        GameManager.instance.SetTotalPairsCount(totalPairs);
         InitializeBoard(row, col);
     }
     public void InitializeBoard(int rows, int columns)
@@ -108,6 +109,7 @@ public class BoardManager : MonoBehaviour
             secondSelectedCard.MarkAsMatched();
             GameManager.instance.IncrementMatches();
             //play match sound
+
         }
         else
         {

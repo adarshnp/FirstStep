@@ -9,9 +9,11 @@ public class GameManager : MonoBehaviour
 {
     private int matches = 0;
     private int turns = 0;
+    private int totalPairs;
 
     public event Action<int> onTurnUpdate;
     public event Action<int> onMatchesUpdate;
+    public event Action onMatchWin;
 
     public static GameManager instance;
     private void Awake()
@@ -23,6 +25,10 @@ public class GameManager : MonoBehaviour
     {
         matches = 0;
         turns = 0;
+    }
+    public void SetTotalPairsCount(int value)
+    {
+        totalPairs = value;
     }
 
     //track moves count
@@ -37,9 +43,17 @@ public class GameManager : MonoBehaviour
     {
         matches++;
         onMatchesUpdate.Invoke(matches);
+        if (totalPairs <= matches)
+        {
+            WinGame();
+        }
     }
 
     //handle end game
+    public void WinGame()
+    {
+        onMatchWin.Invoke();
+    }
 
     //handle restart game
 }
