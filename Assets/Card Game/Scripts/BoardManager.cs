@@ -19,7 +19,6 @@ public class BoardManager : MonoBehaviour
     public int col;
     public float spacing;
     public float cardSize;
-    public Transform samplecube;
 
 
     private Card firstSelectedCard;
@@ -35,13 +34,17 @@ public class BoardManager : MonoBehaviour
     }
     private void Start()
     {
-        GameManager.instance.SetTotalPairsCount(totalPairs);
-        InitializeBoard(row, col);
+        GameManager.instance.onGridGeneration += InitializeBoard;
     }
-    public void InitializeBoard(int rows, int columns)
+
+    private void InitializeBoard(int rows, int columns)
     {
+        ClearCards();
+        cardValues.Clear();
+
         totalPairs = (rows * columns) / 2;
 
+        GameManager.instance.SetTotalPairsCount(totalPairs);
         // Initialize card Values for each pair
         for (int i = 0; i < totalPairs; i++)
         {
@@ -63,8 +66,7 @@ public class BoardManager : MonoBehaviour
         Vector3 centerRightAnchorPoint = cam.ViewportToWorldPoint(new Vector3(1, 0.5f, cam.nearClipPlane));
 
         Vector3 gridPosition = new Vector3(centerRightAnchorPoint.x - col * spacing, centerRightAnchorPoint.y - row * 0.5f * spacing, 0);
-        transform.position = gridPosition;
-        samplecube.position = centerRightAnchorPoint;
+        board.position = gridPosition;
 
         // Card Distribution
         for (int row = 0; row < rows; row++)
@@ -130,5 +132,11 @@ public class BoardManager : MonoBehaviour
         isCheckingMatch = false;
     }
 
-
+    private void ClearCards()
+    {
+        foreach(Transform child in board)
+        {
+            Destroy(child.gameObject);
+        }
+    }
 }
