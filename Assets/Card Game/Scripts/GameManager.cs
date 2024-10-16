@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public event Action<int> onTurnUpdate;
     public event Action<int> onMatchesUpdate;
     public event Action onMatchWin;
-    public event Action onNewGame;
+    public event Action onGameSessionStart;
 
     public static GameManager instance;
     private void Awake()
@@ -55,8 +55,13 @@ public class GameManager : MonoBehaviour
     //handle new game
     public void NewGame()
     {
-        onNewGame.Invoke();
+        onGameSessionStart.Invoke();
         matches = 0;
         turns = 0;
+    }
+    
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
