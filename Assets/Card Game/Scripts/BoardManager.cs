@@ -8,6 +8,15 @@ public class BoardManager : MonoBehaviour
 {
 
     public static BoardManager Instance;
+    public GameObject cardPrefab;
+    public Transform board;
+    public int totalPairs;
+
+    private List<int> cardValues = new List<int>();
+
+    public int row;
+    public int col;
+    public float spacing;
 
 
     private Card firstSelectedCard;
@@ -17,6 +26,39 @@ public class BoardManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+    private void Start()
+    {
+        InitializeBoard(row,col);
+    }
+    public void InitializeBoard(int rows, int columns)
+    {
+        totalPairs = (rows * columns) / 2;
+
+        // Initialize card Values for each pair
+        for (int i = 0; i < totalPairs; i++)
+        {
+            cardValues.Add(i);
+            cardValues.Add(i); 
+        }
+
+        //shuffle card values here
+
+        // Card Distribution
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < columns; col++)
+            {
+                int cardIndex = row * columns + col;
+                if (cardIndex >= cardValues.Count) break;
+
+                GameObject newCard = Instantiate(cardPrefab, board);
+                newCard.transform.position = new Vector3(col*spacing, row*spacing, 0);
+
+                Card cardComponent = newCard.GetComponent<Card>();
+                cardComponent.SetCardValue(cardValues[cardIndex]);  // Assigning card value
+            }
+        }
     }
 
     public void CardSelected(Card selectedCard)

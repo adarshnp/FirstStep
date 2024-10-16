@@ -2,19 +2,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// class representing a card. 
+/// contains card data and user input reading
+/// </summary>
 public class Card : MonoBehaviour
 {
     public int value;
     private Vector3 originalScale;
-    public bool isMatched=false;
+    public bool isMatched = false;
     private SpriteRenderer spriteRenderer;
     private void Start()
     {
         originalScale = transform.localScale;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-
+    public void SetCardValue(int value)
+    {
+        this.value = value;
+    }
     private void OnMouseDown()
     {
         BoardManager.Instance.CardSelected(this);
