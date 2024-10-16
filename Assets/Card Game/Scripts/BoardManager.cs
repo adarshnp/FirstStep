@@ -11,17 +11,23 @@ public class BoardManager : MonoBehaviour
     public GameObject cardPrefab;
     public Transform board;
     public int totalPairs;
+    public Camera cam;
 
     private List<int> cardValues = new List<int>();
 
     public int row;
     public int col;
     public float spacing;
+    public float cardSize;
+    public Transform samplecube;
 
 
     private Card firstSelectedCard;
     private Card secondSelectedCard;
     private bool isCheckingMatch = false;
+
+    private Vector3 centerRightAnchorPoint;
+
 
     private void Awake()
     {
@@ -29,7 +35,7 @@ public class BoardManager : MonoBehaviour
     }
     private void Start()
     {
-        InitializeBoard(row,col);
+        InitializeBoard(row, col);
     }
     public void InitializeBoard(int rows, int columns)
     {
@@ -39,10 +45,18 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i < totalPairs; i++)
         {
             cardValues.Add(i);
-            cardValues.Add(i); 
+            cardValues.Add(i);
         }
 
         //shuffle card values here
+
+
+        //find cener right point of camera viewport in world space
+        Vector3 centerRightAnchorPoint = cam.ViewportToWorldPoint(new Vector3(1, 0.5f, cam.nearClipPlane));
+
+        Vector3 gridPosition = new Vector3(centerRightAnchorPoint.x - col * spacing, centerRightAnchorPoint.y - row * 0.5f * spacing, 0);
+        transform.position = gridPosition;
+        samplecube.position = centerRightAnchorPoint;
 
         // Card Distribution
         for (int row = 0; row < rows; row++)
@@ -53,7 +67,7 @@ public class BoardManager : MonoBehaviour
                 if (cardIndex >= cardValues.Count) break;
 
                 GameObject newCard = Instantiate(cardPrefab, board);
-                newCard.transform.position = new Vector3(col*spacing, row*spacing, 0);
+                newCard.transform.localPosition = new Vector3(col * spacing, row * spacing, 0);
 
                 Card cardComponent = newCard.GetComponent<Card>();
                 cardComponent.SetCardValue(cardValues[cardIndex]);  // Assigning card value
@@ -81,7 +95,7 @@ public class BoardManager : MonoBehaviour
     private IEnumerator CheckForMatch()
     {
         isCheckingMatch = true;
-        
+
         //increment move count
 
         yield return new WaitForSeconds(1f);  // Delay for the user to see the flipped cards
