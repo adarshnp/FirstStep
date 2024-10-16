@@ -50,6 +50,8 @@ public class BoardManager : MonoBehaviour
         ShuffleCardValues();
 
         PopulateCardsToGrid(rows, columns);
+
+        ScaleBoard(rows, columns);
     }
     
     private void PopulateCardsToGrid(int rows, int columns)
@@ -137,5 +139,34 @@ public class BoardManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+    }
+
+    private void ScaleBoard(int rows, int columns)//heightFit
+    {
+        Vector2 gridSize = new Vector2(columns * spacing, rows * spacing);
+
+        Vector3 centerTopPoint = cam.ViewportToWorldPoint(new Vector3(0.5f,1,cam.nearClipPlane));
+        Vector3 centerBottomPoint = cam.ViewportToWorldPoint(new Vector3(0.5f,0,cam.nearClipPlane));
+
+        Vector3 centerLeftPoint = cam.ViewportToWorldPoint(new Vector3(0.2f, 0.5f, cam.nearClipPlane));//left most point corrected to avoid UI overlaping over board
+        Vector3 centerRightPoint = cam.ViewportToWorldPoint(new Vector3(1, 0.5f, cam.nearClipPlane));
+
+        float viewPortHeightInWorldSpace = Vector3.Distance(centerTopPoint, centerBottomPoint);
+        float viewPortWidthInWorldSpace = Vector3.Distance(centerLeftPoint, centerRightPoint);
+
+        float aspectRatio = gridSize.x / gridSize.y;
+
+        float scaleFactor;
+
+        if (aspectRatio > 1) 
+        {
+            scaleFactor = viewPortWidthInWorldSpace / gridSize.x;
+        }
+        else
+        {
+            scaleFactor = viewPortHeightInWorldSpace / gridSize.y;
+        }
+        scaleFactor = Mathf.Clamp(scaleFactor,0.2f,2);
+        board.localScale = Vector3.one * scaleFactor;
     }
 }
