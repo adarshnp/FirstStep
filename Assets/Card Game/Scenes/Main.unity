@@ -400,9 +400,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 7389228755423229672, guid: 9d4e6010247f1ce43b86cc77dd8813db, type: 3}
   board: {fileID: 246597865}
-  totalPairs: 2
+  totalPairs: 3
   cam: {fileID: 963194227}
-  row: 2
+  row: 3
   col: 2
   spacing: 1.5
   cardSize: 0

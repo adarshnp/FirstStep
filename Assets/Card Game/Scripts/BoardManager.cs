@@ -49,7 +49,14 @@ public class BoardManager : MonoBehaviour
             cardValues.Add(i);
         }
 
-        //shuffle card values here
+        // Shuffle card types
+        for (int i = 0; i < cardValues.Count; i++)
+        {
+            int randomIndex = Random.Range(0, cardValues.Count);
+            int temp = cardValues[i];
+            cardValues[i] = cardValues[randomIndex];
+            cardValues[randomIndex] = temp;
+        }
 
 
         //find cener right point of camera viewport in world space
