@@ -87,6 +87,9 @@ public class GameManager : MonoBehaviour
         matches = 0;
         turns = 0;
 
+        onMatchesUpdate.Invoke(0);
+        onTurnUpdate.Invoke(0);
+
         onGridGeneration.Invoke(layout.rows, layout.columns);
     }
     public bool IsLastLevel()
