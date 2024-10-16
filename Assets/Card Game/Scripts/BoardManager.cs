@@ -10,7 +10,7 @@ public class BoardManager : MonoBehaviour
     public static BoardManager Instance;
     public GameObject cardPrefab;
     public Transform board;
-    public int totalPairs;
+    private int totalPairs;
     public Camera cam;
 
     private List<int> cardValues = new List<int>();
@@ -21,13 +21,11 @@ public class BoardManager : MonoBehaviour
     private Card secondSelectedCard;
     private bool isCheckingMatch = false;
 
-    private Vector3 centerRightAnchorPoint;
-
-
     private void Awake()
     {
         Instance = this;
     }
+    
     private void Start()
     {
         GameManager.instance.onGridGeneration += InitializeBoard;
@@ -49,23 +47,16 @@ public class BoardManager : MonoBehaviour
             cardValues.Add(i);
         }
 
-        // Shuffle card types
-        for (int i = 0; i < cardValues.Count; i++)
-        {
-            int randomIndex = Random.Range(0, cardValues.Count);
-            int temp = cardValues[i];
-            cardValues[i] = cardValues[randomIndex];
-            cardValues[randomIndex] = temp;
-        }
+        ShuffleCardValues();
 
+        PopulateCardsToGrid(rows, columns);
+    }
+    
+    private void PopulateCardsToGrid(int rows, int columns)
+    {
+        float halfLength = (columns - 1) * spacing * 0.5f;
+        float halfHeight = (rows - 1) * spacing * 0.5f;
 
-        //find cener right point of camera viewport in world space
-        Vector3 centerRightAnchorPoint = cam.ViewportToWorldPoint(new Vector3(1, 0.5f, cam.nearClipPlane));
-
-        Vector3 gridPosition = new Vector3(centerRightAnchorPoint.x - columns * spacing, centerRightAnchorPoint.y - rows * 0.5f * spacing, 0);
-        board.position = gridPosition + new Vector3(1,1,0)*0.5f;
-
-        // Card Distribution
         for (int row = 0; row < rows; row++)
         {
             for (int col = 0; col < columns; col++)
@@ -74,11 +65,22 @@ public class BoardManager : MonoBehaviour
                 if (cardIndex >= cardValues.Count) break;
 
                 GameObject newCard = Instantiate(cardPrefab, board);
-                newCard.transform.localPosition = new Vector3(col * spacing, row * spacing, 0);
+                newCard.transform.localPosition = new Vector3(col * spacing - halfLength, row * spacing - halfHeight, 0);
 
                 Card cardComponent = newCard.GetComponent<Card>();
-                cardComponent.SetCardValue(cardValues[cardIndex]);  // Assigning card value
+                cardComponent.SetCardValue(cardValues[cardIndex]);
             }
+        }
+    }
+    
+    private void ShuffleCardValues()
+    {
+        for (int i = 0; i < cardValues.Count; i++)
+        {
+            int randomIndex = Random.Range(0, cardValues.Count);
+            int temp = cardValues[i];
+            cardValues[i] = cardValues[randomIndex];
+            cardValues[randomIndex] = temp;
         }
     }
 
@@ -128,10 +130,10 @@ public class BoardManager : MonoBehaviour
         secondSelectedCard = null;
         isCheckingMatch = false;
     }
-
+    
     private void ClearCards()
     {
-        foreach(Transform child in board)
+        foreach (Transform child in board)
         {
             Destroy(child.gameObject);
         }
