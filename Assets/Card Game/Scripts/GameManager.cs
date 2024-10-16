@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 /// <summary>
 /// Game Manager class that handles score and game flow
 /// </summary>
@@ -10,13 +11,17 @@ public class GameManager : MonoBehaviour
     private int matches = 0;
     private int turns = 0;
     private int totalPairs;
+    private float currentLevelMultiplier=1;
+    public int totalScore = 0;
+    public float scoreMultiplierIncrementPerLevel = 0.25f;
 
     public event Action<int> onTurnUpdate;//update UI for turn counter
     public event Action<int> onMatchesUpdate;//update UI for match counter
+    public event Action<int> onScoreUpdate;//update UI for score
     public event Action onMatchWin; // enable matchSuccess UI and disable game board UI 
     public event Action onGameSessionStart; //enable game level UI and disable main menu UI
     public event Action onNextLevel; // disable match complaetion UI and enable game board UI
-    public event Action<int,int> onGridGeneration; // generate card layout for current level
+    public event Action<int, int> onGridGeneration; // generate card layout for current level
 
     public static GameManager instance;
 
@@ -45,13 +50,22 @@ public class GameManager : MonoBehaviour
         onMatchesUpdate.Invoke(matches);
         if (totalPairs <= matches)
         {
-            WinGame();
+            WinLevel();
         }
     }
 
-    //handle end game
-    public void WinGame()
+    //calculate score
+    private int CalculateScore()
     {
+        if (turns == 0) return 0;
+        float score = (float)matches / turns * currentLevelMultiplier;
+        return (int)(score * 100);
+    }
+
+    //handle end game
+    public void WinLevel()
+    {
+        totalScore += CalculateScore();
         onMatchWin.Invoke();
     }
 
@@ -61,17 +75,18 @@ public class GameManager : MonoBehaviour
     public void NewGame()
     {
         onGameSessionStart.Invoke();
-        matches = 0;
-        turns = 0;
         currentLevelIndex = 0;
+        totalScore = 0;
+        currentLevelMultiplier = 1;
         LoadLevel(currentLevelIndex);
     }
-    
+
     //handle level progression
     public void NextLevel()
     {
         currentLevelIndex++;
         onNextLevel.Invoke();
+        currentLevelMultiplier += scoreMultiplierIncrementPerLevel;
         LoadLevel(currentLevelIndex);
     }
     public void LoadLevel(int levelIndex)

@@ -141,7 +141,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private void ScaleBoard(int rows, int columns)//heightFit
+    private void ScaleBoard(int rows, int columns)
     {
         Vector2 gridSize = new Vector2(columns * spacing, rows * spacing);
 
