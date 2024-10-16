@@ -12,6 +12,7 @@ public class SceneController : MonoBehaviour
 
     private void Start()
     {
+        GameManager.instance.onNewGame += OpenGameScene;
         GoToMainMenu();
     }
 

@@ -14,17 +14,12 @@ public class GameManager : MonoBehaviour
     public event Action<int> onTurnUpdate;
     public event Action<int> onMatchesUpdate;
     public event Action onMatchWin;
+    public event Action onNewGame;
 
     public static GameManager instance;
     private void Awake()
     {
         instance = this;
-    }
-
-    private void Start()
-    {
-        matches = 0;
-        turns = 0;
     }
     public void SetTotalPairsCount(int value)
     {
@@ -56,4 +51,12 @@ public class GameManager : MonoBehaviour
     }
 
     //handle restart game
+
+    //handle new game
+    public void NewGame()
+    {
+        onNewGame.Invoke();
+        matches = 0;
+        turns = 0;
+    }
 }
