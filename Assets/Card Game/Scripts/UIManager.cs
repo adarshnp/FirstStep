@@ -10,8 +10,11 @@ public class UIManager : MonoBehaviour
         GameManager.instance.onMatchesUpdate += UpdateMatchesUI;
         GameManager.instance.onTurnUpdate += UpdateTurnsUI;
         GameManager.instance.onScoreUpdate += UpdateLevelScoreUI;
+        GameManager.instance.onLoadComplete += UpdateHighScoreUI;
+
         GameManager.instance.onMatchWin += OpenMatchCompletionUI;
         GameManager.instance.onNextLevel += CloseMatchCompletionUI;
+        GameManager.instance.onGameSessionStart += CloseMatchCompletionUI;
     }
 
     #region GameScore
@@ -32,6 +35,21 @@ public class UIManager : MonoBehaviour
     private void UpdateLevelScoreUI(int value)
     {
         levelScoreUI.text = value.ToString();
+    }
+
+    public TMP_Text highScoreUI;
+    public GameObject continueButton;
+    private void UpdateHighScoreUI(int value)
+    {
+        if (value == 0)
+        {
+            continueButton.SetActive(false);
+        }
+        else
+        {
+            continueButton.SetActive(true);
+        }
+        highScoreUI.text = value.ToString();
     }
     #endregion
 

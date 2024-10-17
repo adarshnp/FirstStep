@@ -8,6 +8,7 @@ using UnityEngine.SocialPlatforms.Impl;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    private int highScore;
     private int matches = 0;
     private int turns = 0;
     private int totalPairs;
@@ -23,6 +24,8 @@ public class GameManager : MonoBehaviour
     public event Action onGameSessionStart; //enable game level UI and disable main menu UI
     public event Action onNextLevel; // disable match complaetion UI and enable game board UI
     public event Action<int, int> onGridGeneration; // generate card layout for current level
+    public event Action<int, int,int> onSaveGame;
+    public event Action<int> onLoadComplete;
 
     public static GameManager instance;
 
@@ -72,11 +75,34 @@ public class GameManager : MonoBehaviour
         CompletedLevelsScore = currentScore;
         onScoreUpdate.Invoke(CompletedLevelsScore);
         onMatchWin.Invoke();
-        SaveSystem.instance.SaveGame(currentLevelIndex,currentScore);
+        onSaveGame.Invoke(currentLevelIndex, currentScore, highScore);
         CompletedLevelsScore = currentScore;
+        if (highScore < CompletedLevelsScore)
+        {
+            highScore = CompletedLevelsScore;
+        }
     }
 
-    //handle restart game
+    //handle Resume level from save data
+    public void ApplySavedDataToGame(SaveData data)
+    {
+        if(data == null)
+        {
+            onLoadComplete.Invoke(0);
+            return;
+        }
+        CompletedLevelsScore = data.score;
+        currentLevelIndex = data.level;
+        highScore = data.highScore;
+        onLoadComplete.Invoke(highScore);
+    }
+    public void ResumeLevel()
+    {
+        onGameSessionStart.Invoke();
+        currentLevelIndex++;
+        currentScore = 0;
+        LoadLevel(currentLevelIndex);
+    }
 
     //handle new game
     public void NewGame()
@@ -85,7 +111,6 @@ public class GameManager : MonoBehaviour
         currentLevelIndex = 0;
         CompletedLevelsScore = 0;
         currentScore = 0;
-        currentLevelMultiplier = 1;
         LoadLevel(currentLevelIndex);
     }
     //handle level progression
