@@ -9,10 +9,13 @@ using UnityEngine;
 /// </summary>
 public class Card : MonoBehaviour
 {
-    public int value;
+    public int Value { get; private set; }
+    public bool IsMatched { get; private set; } = false;
+
+
     private Vector3 originalScale;
-    public bool isMatched = false;
     private SpriteRenderer spriteRenderer;
+
     public TMP_Text valueText;
     private void Start()
     {
@@ -21,7 +24,7 @@ public class Card : MonoBehaviour
     }
     public void SetCardValue(int value)
     {
-        this.value = value;
+        this.Value = value;
         valueText.text = value.ToString();
     }
     private void OnMouseDown()
@@ -40,7 +43,7 @@ public class Card : MonoBehaviour
     }
     public void MarkAsMatched()
     {
-        isMatched = true;
+        IsMatched = true;
         StartCoroutine(VanishAndDisable());
     }
 

@@ -2136,9 +2136,9 @@ MonoBehaviour:
   matchCompletionUI: {fileID: 394209317}
   gameBoard: {fileID: 171976907}
   nextLevelButton: {fileID: 1448774910}
+  continueButton: {fileID: 1327533955}
   scoreTextUI: {fileID: 864722470}
   scoreUI: {fileID: 1421353238}
-  continueButton: {fileID: 1327533955}
 --- !u!1 &956556905
 GameObject:
   m_ObjectHideFlags: 0

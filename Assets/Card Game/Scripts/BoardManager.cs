@@ -88,7 +88,7 @@ public class BoardManager : MonoBehaviour
 
     public void CardSelected(Card selectedCard)
     {
-        if (isCheckingMatch || selectedCard.isMatched || selectedCard == firstSelectedCard) return;
+        if (isCheckingMatch || selectedCard.IsMatched || selectedCard == firstSelectedCard) return;
 
 
         if (firstSelectedCard == null)
@@ -113,7 +113,7 @@ public class BoardManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);  // Delay for the user to see the flipped cards
 
-        if (firstSelectedCard.value == secondSelectedCard.value)
+        if (firstSelectedCard.Value == secondSelectedCard.Value)
         {
             firstSelectedCard.MarkAsMatched();
             secondSelectedCard.MarkAsMatched();
