@@ -90,7 +90,6 @@ public class BoardManager : MonoBehaviour
     {
         if (isCheckingMatch || selectedCard.isMatched || selectedCard == firstSelectedCard) return;
 
-        GameManager.instance.IncrementTurns();
 
         if (firstSelectedCard == null)
         {
@@ -101,6 +100,7 @@ public class BoardManager : MonoBehaviour
         {
             secondSelectedCard = selectedCard;
             selectedCard.StartCardOpenAnimation();
+            GameManager.instance.IncrementTurns();
             StartCoroutine(CheckForMatch());
         }
     }
