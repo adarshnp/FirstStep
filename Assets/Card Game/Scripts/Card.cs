@@ -49,7 +49,6 @@ public class Card : MonoBehaviour
 
     private IEnumerator VanishAndDisable()
     {
-        // Start the vanish animation and wait until it's done
         yield return StartCoroutine(spriteRenderer.PlayCardVanish(originalScale));
 
         // After the animation is complete, disable the GameObject
