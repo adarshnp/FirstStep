@@ -8,18 +8,17 @@ public class BoardManager : MonoBehaviour
 {
 
     public static BoardManager Instance;
-    public GameObject cardPrefab;
-    public Transform board;
+
+    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private Transform board;
+    [SerializeField] private Camera cam;
+    [SerializeField] private float spacing;
+
     private int totalPairs;
-    public Camera cam;
-
-    private List<int> cardValues = new List<int>();
-
-    public float spacing;
-
     private Card firstSelectedCard;
     private Card secondSelectedCard;
     private bool isCheckingMatch = false;
+    private List<int> cardValues = new List<int>();
 
     private void Awake()
     {
@@ -109,7 +108,6 @@ public class BoardManager : MonoBehaviour
     {
         isCheckingMatch = true;
 
-        //increment move count
 
         yield return new WaitForSeconds(1f);  // Delay for the user to see the flipped cards
 
