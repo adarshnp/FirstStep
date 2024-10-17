@@ -13,19 +13,21 @@ public class GameManager : MonoBehaviour
     private int turns = 0;
     private int totalPairs;
     private float currentLevelMultiplier=1;
-    public int currentScore = 0;
+    public  int currentScore = 0;
     public float scoreMultiplierIncrementPerLevel = 0.25f;
     private int CompletedLevelsScore = 0;
 
     public event Action<int> onTurnUpdate;//update UI for turn counter
     public event Action<int> onMatchesUpdate;//update UI for match counter
     public event Action<int> onScoreUpdate;//update UI for score
+    public event Action<int> onHighScoreUpdate; // to update highscore after load
+
     public event Action onMatchWin; // enable matchSuccess UI and disable game board UI 
     public event Action onGameSessionStart; //enable game level UI and disable main menu UI
     public event Action onNextLevel; // disable match complaetion UI and enable game board UI
     public event Action<int, int> onGridGeneration; // generate card layout for current level
-    public event Action<int, int,int> onSaveGame;
-    public event Action<int> onLoadComplete;
+    public event Action<int, int,int> onSaveGame;// on save after a matchwin
+    public event Action onEnterMainMenu;
 
     public static GameManager instance;
 
@@ -73,14 +75,16 @@ public class GameManager : MonoBehaviour
     public void WinLevel()
     {
         CompletedLevelsScore = currentScore;
-        onScoreUpdate.Invoke(CompletedLevelsScore);
-        onMatchWin.Invoke();
-        onSaveGame.Invoke(currentLevelIndex, currentScore, highScore);
-        CompletedLevelsScore = currentScore;
         if (highScore < CompletedLevelsScore)
         {
             highScore = CompletedLevelsScore;
         }
+
+
+        onScoreUpdate.Invoke(CompletedLevelsScore);
+        onMatchWin.Invoke();
+        onSaveGame.Invoke(currentLevelIndex, currentScore, highScore);
+        onHighScoreUpdate.Invoke(highScore);
     }
 
     //handle Resume level from save data
@@ -88,13 +92,13 @@ public class GameManager : MonoBehaviour
     {
         if(data == null)
         {
-            onLoadComplete.Invoke(0);
+            onHighScoreUpdate.Invoke(0);
             return;
         }
         CompletedLevelsScore = data.score;
         currentLevelIndex = data.level;
         highScore = data.highScore;
-        onLoadComplete.Invoke(highScore);
+        onHighScoreUpdate.Invoke(highScore);
     }
     public void ResumeLevel()
     {
@@ -113,7 +117,6 @@ public class GameManager : MonoBehaviour
         currentScore = 0;
         LoadLevel(currentLevelIndex);
     }
-    //handle level progression
     public void NextLevel()
     {
         currentLevelIndex++;
@@ -147,6 +150,10 @@ public class GameManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+    public void EnterMainMenu()
+    {
+        onEnterMainMenu.Invoke();
     }
     public void Quit()
     {

@@ -10,57 +10,48 @@ public class UIManager : MonoBehaviour
         GameManager.instance.onMatchesUpdate += UpdateMatchesUI;
         GameManager.instance.onTurnUpdate += UpdateTurnsUI;
         GameManager.instance.onScoreUpdate += UpdateLevelScoreUI;
-        GameManager.instance.onLoadComplete += UpdateHighScoreUI;
+        GameManager.instance.onHighScoreUpdate += UpdateHighScoreUI;
 
         GameManager.instance.onMatchWin += OpenMatchCompletionUI;
         GameManager.instance.onNextLevel += CloseMatchCompletionUI;
         GameManager.instance.onGameSessionStart += CloseMatchCompletionUI;
+        GameManager.instance.onEnterMainMenu += ToggleContinueButton;
     }
 
     #region GameScore
 
-    public TMP_Text matchesUI;
+    [SerializeField] private TMP_Text matchesUI;
     private void UpdateMatchesUI(int value)
     {
         matchesUI.text = value.ToString();
     }
 
-    public TMP_Text turnsUI;
+    [SerializeField] private TMP_Text turnsUI;
     private void UpdateTurnsUI(int value)
     {
         turnsUI.text = value.ToString();
     }
 
-    public TMP_Text levelScoreUI;
+    [SerializeField] private TMP_Text levelScoreUI;
     private void UpdateLevelScoreUI(int value)
     {
         levelScoreUI.text = value.ToString();
     }
 
-    public TMP_Text highScoreUI;
-    public GameObject continueButton;
+    [SerializeField] private TMP_Text highScoreUI;
     private void UpdateHighScoreUI(int value)
     {
-        if (value == 0)
-        {
-            continueButton.SetActive(false);
-        }
-        else
-        {
-            continueButton.SetActive(true);
-        }
         highScoreUI.text = value.ToString();
     }
     #endregion
 
-
     #region MatchCompletion
 
-    public GameObject matchCompletionUI;
-    public GameObject gameBoard;
-    public GameObject nextLevelButton;
-    public GameObject scoreTextUI;
-    public TMP_Text scoreUI;
+    [SerializeField] private GameObject matchCompletionUI;
+    [SerializeField] private GameObject gameBoard;
+    [SerializeField] private GameObject nextLevelButton;
+    [SerializeField] private GameObject scoreTextUI;
+    [SerializeField] private TMP_Text scoreUI;
     private void OpenMatchCompletionUI()
     {
         gameBoard.SetActive(false);
@@ -82,4 +73,19 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+    #region MAIN_MENU
+    [SerializeField] private GameObject continueButton;
+    private void ToggleContinueButton()
+    {
+        if (GameManager.instance.IsLastLevel())
+        {
+            continueButton.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("continue button enabled");
+            continueButton.SetActive(true);
+        }
+    }
+    #endregion
 }

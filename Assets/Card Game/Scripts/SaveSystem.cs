@@ -9,8 +9,8 @@ public class SaveSystem : MonoBehaviour
     {
         saveFilePath = Application.persistentDataPath + "/savefile.json";
         GameManager.instance.onSaveGame += SaveGameData;
-
         LoadGame();
+
     }
     private void LoadGame()
     {
