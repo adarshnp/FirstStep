@@ -10,6 +10,7 @@ public class BootStrapper : MonoBehaviour
     public SaveSystem saveSystem;
     public UIManager uiManager;
     public BoardManager boardManager;
+    public SoundManager soundManager;
     private IEnumerator Start()
     {
         GameManager.instance.onGameSessionStart += OpenGameScene;
@@ -22,6 +23,7 @@ public class BootStrapper : MonoBehaviour
 
     private void Boot()
     {
+        soundManager.enabled = true;
         boardManager.enabled = true;
         uiManager.enabled = true;
         saveSystem.enabled = true;

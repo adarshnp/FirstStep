@@ -118,14 +118,14 @@ public class BoardManager : MonoBehaviour
             firstSelectedCard.MarkAsMatched();
             secondSelectedCard.MarkAsMatched();
             GameManager.instance.IncrementMatches();
-            //play match sound
+            SoundManager.Instance.PlayMatchSound();
 
         }
         else
         {
             firstSelectedCard.StartCardReturnAnimation();
             secondSelectedCard.StartCardReturnAnimation();
-            //play mismatch sound
+            SoundManager.Instance.PlayMismatchSound();
         }
 
         firstSelectedCard = null;

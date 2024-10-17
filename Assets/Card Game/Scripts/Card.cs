@@ -27,6 +27,7 @@ public class Card : MonoBehaviour
     private void OnMouseDown()
     {
         BoardManager.Instance.CardSelected(this);
+        SoundManager.Instance.PlayFlipSound();
     }
 
     public void StartCardOpenAnimation()
