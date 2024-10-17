@@ -12,8 +12,9 @@ public class GameManager : MonoBehaviour
     private int turns = 0;
     private int totalPairs;
     private float currentLevelMultiplier=1;
-    public int totalScore = 0;
+    public int currentScore = 0;
     public float scoreMultiplierIncrementPerLevel = 0.25f;
+    private int CompletedLevelsScore = 0;
 
     public event Action<int> onTurnUpdate;//update UI for turn counter
     public event Action<int> onMatchesUpdate;//update UI for match counter
@@ -40,6 +41,7 @@ public class GameManager : MonoBehaviour
     public void IncrementTurns()
     {
         turns++;
+        currentScore = CompletedLevelsScore + CalculateCurrentLevelScore();
         onTurnUpdate.Invoke(turns);
     }
 
@@ -47,6 +49,7 @@ public class GameManager : MonoBehaviour
     public void IncrementMatches()
     {
         matches++;
+        currentScore = CompletedLevelsScore + CalculateCurrentLevelScore();
         onMatchesUpdate.Invoke(matches);
         if (totalPairs <= matches)
         {
@@ -55,9 +58,10 @@ public class GameManager : MonoBehaviour
     }
 
     //calculate score
-    private int CalculateScore()
+    private int CalculateCurrentLevelScore()
     {
         if (turns == 0) return 0;
+        currentLevelMultiplier = 1 + currentLevelIndex* scoreMultiplierIncrementPerLevel;
         float score = (float)matches / turns * currentLevelMultiplier;
         return (int)(score * 100);
     }
@@ -65,8 +69,11 @@ public class GameManager : MonoBehaviour
     //handle end game
     public void WinLevel()
     {
-        totalScore += CalculateScore();
+        CompletedLevelsScore = currentScore;
+        onScoreUpdate.Invoke(CompletedLevelsScore);
         onMatchWin.Invoke();
+        SaveSystem.instance.SaveGame(currentLevelIndex,currentScore);
+        CompletedLevelsScore = currentScore;
     }
 
     //handle restart game
@@ -76,17 +83,16 @@ public class GameManager : MonoBehaviour
     {
         onGameSessionStart.Invoke();
         currentLevelIndex = 0;
-        totalScore = 0;
+        CompletedLevelsScore = 0;
+        currentScore = 0;
         currentLevelMultiplier = 1;
         LoadLevel(currentLevelIndex);
     }
-
     //handle level progression
     public void NextLevel()
     {
         currentLevelIndex++;
         onNextLevel.Invoke();
-        currentLevelMultiplier += scoreMultiplierIncrementPerLevel;
         LoadLevel(currentLevelIndex);
     }
     public void LoadLevel(int levelIndex)
@@ -101,9 +107,11 @@ public class GameManager : MonoBehaviour
 
         matches = 0;
         turns = 0;
+        currentScore = CompletedLevelsScore;
 
         onMatchesUpdate.Invoke(0);
         onTurnUpdate.Invoke(0);
+        onScoreUpdate.Invoke(CompletedLevelsScore);
 
         onGridGeneration.Invoke(layout.rows, layout.columns);
     }
