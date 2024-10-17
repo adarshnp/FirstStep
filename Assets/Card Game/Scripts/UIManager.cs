@@ -5,7 +5,26 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private TMP_Text matchesUI;
+    [SerializeField] private TMP_Text turnsUI;
+    [SerializeField] private TMP_Text levelScoreUI;
+    [SerializeField] private TMP_Text highScoreUI;
+
+
+    [SerializeField] private GameObject matchCompletionUI;
+    [SerializeField] private GameObject gameBoard;
+    [SerializeField] private GameObject nextLevelButton;
+    [SerializeField] private GameObject continueButton;
+
+    [SerializeField] private GameObject scoreTextUI;
+    [SerializeField] private TMP_Text scoreUI;
+
+
     private void Start()
+    {
+        SubscribeToEvents();
+    }
+    private void SubscribeToEvents()
     {
         GameManager.instance.onMatchesUpdate += UpdateMatchesUI;
         GameManager.instance.onTurnUpdate += UpdateTurnsUI;
@@ -20,25 +39,21 @@ public class UIManager : MonoBehaviour
 
     #region GameScore
 
-    [SerializeField] private TMP_Text matchesUI;
     private void UpdateMatchesUI(int value)
     {
         matchesUI.text = value.ToString();
     }
 
-    [SerializeField] private TMP_Text turnsUI;
     private void UpdateTurnsUI(int value)
     {
         turnsUI.text = value.ToString();
     }
 
-    [SerializeField] private TMP_Text levelScoreUI;
     private void UpdateLevelScoreUI(int value)
     {
         levelScoreUI.text = value.ToString();
     }
 
-    [SerializeField] private TMP_Text highScoreUI;
     private void UpdateHighScoreUI(int value)
     {
         highScoreUI.text = value.ToString();
@@ -47,11 +62,6 @@ public class UIManager : MonoBehaviour
 
     #region MatchCompletion
 
-    [SerializeField] private GameObject matchCompletionUI;
-    [SerializeField] private GameObject gameBoard;
-    [SerializeField] private GameObject nextLevelButton;
-    [SerializeField] private GameObject scoreTextUI;
-    [SerializeField] private TMP_Text scoreUI;
     private void OpenMatchCompletionUI()
     {
         gameBoard.SetActive(false);
@@ -74,7 +84,6 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region MAIN_MENU
-    [SerializeField] private GameObject continueButton;
     private void ToggleContinueButton()
     {
         if (GameManager.instance.IsLastLevel())
@@ -83,7 +92,6 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("continue button enabled");
             continueButton.SetActive(true);
         }
     }
